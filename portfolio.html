@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мое Портфолио Разработчика</title>
+    <meta charset="UTF-8"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6; /* Светлый фон */
+            color: #333;
+        }
+
+        header {
+            background-color: #3498db; /* Синий заголовок */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        section {
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #2ecc71; /* Зеленый подчерк */
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        
+        /* Список проектов */
+        .project-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .project-list li {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .project-list li:hover {
+            background-color: #e8f8f5;
+        }
+        
+        .project-list a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .project-desc {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Стиль для навыков */
+        .skills span {
+            display: inline-block;
+            background-color: #2ecc71;
+            color: white;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Моё Портфолио Разработчика</h1>
+        <p>Практический опыт программирования на JavaScript, HTML, CSS на мобильном устройстве.</p>
+    </header>
+
+    <section id="about">
+        <h3>Обо мне</h3>
+        <p>Самостоятельно освоил основы веб-разработки (Front-end) и логики программирования. Умею быстро разбираться в новом коде и создавать интерактивные приложения.</p>
+    </section>
+
+    <section id="skills">
+        <h3>Ключевые Навыки</h3>
+        <div class="skills">
+            <span>JavaScript (основы)</span>
+            <span>HTML5</span>
+            <span>CSS3</span>
+            <span>Работа с DOM</span>
+            <span>Игровой цикл</span>
+            <span>Сохранение данных (LocalStorage)</span>
+            <span>Датчики (Акселерометр)</span>
+            <span>Адаптивный дизайн</span>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h3>Мои Проекты</h3>
+        <ul class="project-list">
+            <li>
+                <a href="snake.html" target="_blank">Игра "Змейка"</a>
+                <p class="project-desc">Сложный аркадный проект с игровым циклом, управлением массивами и логикой столкновений.</p>
+            </li>
+            <li>
+                <a href="todo_list.html" target="_blank">Менеджер Задач</a>
+                <p class="project-desc">Приложение для сохранения данных в памяти телефона (LocalStorage) с динамическим добавлением/удалением элементов.</p>
+            </li>
+            <li>
+                <a href="magic_ball.html" target="_blank">Магический Шар Предсказаний</a>
+                <p class="project-desc">Проект, использующий датчик движения телефона (акселерометр) для реакции на тряску.</p>
+            </li>
+            <li>
+                <a href="tip_calc.html" target="_blank">Калькулятор Чаевых</a>
+                <p class="project-desc">Интерактивная утилита с моментальным пересчетом данных и адаптацией под валюту (Тенге ₸).</p>
+            </li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Моё Мобильное Портфолио. Все права защищены.</p>
+    </footer>
+
+</body>
+</html>

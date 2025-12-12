@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магический Шар</title>
+    <meta charset="UTF-8"> 
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #1e2b38;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #ball {
+            width: 250px;
+            height: 250px;
+            background-color: #34495e; /* Темный фон шара */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 0 50px rgba(52, 152, 219, 0.5); /* Голубое свечение */
+            margin-bottom: 40px;
+        }
+
+        #answer {
+            width: 150px;
+            height: 150px;
+            background-color: #0d1a26; /* Окно для ответа */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            padding: 10px;
+        }
+        
+        .instruction {
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        .shake-animation {
+            /* Простая анимация тряски */
+            animation: shake 0.5s; 
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🔮 Магический Шар</h2>
+    
+    <div id="ball">
+        <div id="answer">Спроси меня...</div>
+    </div>
+    
+    <p class="instruction">Встряхни телефон, чтобы получить ответ!</p>
+
+<script>
+    // Массив с вариантами ответов (структура данных!)
+    const answers = [
+        "Да, безусловно.",
+        "Это возможно.",
+        "Лучше не надо.",
+        "Спроси позже.",
+        "Мои источники говорят нет.",
+        "Очень сомнительно.",
+        "Шансы высоки."
+    ];
+    
+    // Переменная для отслеживания последнего времени тряски
+    let lastShakeTime = 0;
+    // Минимальный интервал между трясками (в мс)
+    const shakeTimeout = 2000; 
+
+    function giveAnswer() {
+        const ball = document.getElementById('ball');
+        const answerDiv = document.getElementById('answer');
+        
+        // Добавляем класс для анимации тряски
+        ball.classList.add('shake-animation'); 
+        
+        // Выбираем случайный ответ из массива
+        const randomIndex = Math.floor(Math.random() * answers.length);
+        
+        // Показываем ответ через 0.5 секунды (чтобы сначала увидеть анимацию)
+        setTimeout(() => {
+            answerDiv.innerText = answers[randomIndex];
+            // Удаляем класс после анимации
+            ball.classList.remove('shake-animation');
+        }, 500); 
+    }
+
+    // --- ОСНОВА РАБОТЫ С ДАТЧИКАМИ (АКСЕЛЕРОМЕТРОМ) ---
+
+    // Проверяем, поддерживает ли браузер событие deviceorientation (движение)
+    if (window.DeviceMotionEvent) {
+        // Подписываемся на событие движения устройства
+        window.addEventListener('devicemotion', function(event) {
+            // Получаем ускорение по трем осям
+            const acceleration = event.accelerationIncludingGravity;
+            
+            // Вычисляем общую силу тряски (сумма абсолютных значений ускорений)
+            const totalForce = Math.abs(acceleration.x) + Math.abs(acceleration.y) + Math.abs(acceleration.z);
+            
+            // Если сила больше порогового значения (например, 20) 
+            // И если прошло достаточно времени с последней тряски
+            if (totalForce > 20 && (Date.now() - lastShakeTime) > shakeTimeout) {
+                lastShakeTime = Date.now(); // Обновляем время
+                giveAnswer();
+            }
+        });
+        
+    } else {
+        // Если датчик движения не поддерживается, даем возможность нажать на шар
+        document.getElementById('answer').innerText = "Нажми, чтобы получить ответ (датчик не найден).";
+        document.getElementById('ball').onclick = giveAnswer;
+    }
+</script>
+
+</body>
+</html>

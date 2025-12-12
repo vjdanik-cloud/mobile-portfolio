@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат с ИИ</title>
+    <meta charset="UTF-8"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #2c3e50; /* Темно-синий фон */
+            color: white;
+            padding: 20px;
+        }
+        h2 { color: #3498db; margin-bottom: 20px; }
+
+        #chatOutput {
+            width: 95%;
+            max-width: 500px;
+            height: 300px;
+            background: #34495e;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto; /* Для прокрутки */
+            margin-bottom: 20px;
+        }
+
+        .user-message {
+            text-align: right;
+            color: #2ecc71; /* Зеленый */
+            margin: 5px 0;
+        }
+
+        .ai-message {
+            text-align: left;
+            color: #f1c40f; /* Желтый */
+            margin: 5px 0;
+            border-bottom: 1px solid #4a6372;
+            padding-bottom: 5px;
+        }
+        
+        #userInput {
+            width: 70%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #3498db;
+            font-size: 16px;
+        }
+
+        #sendBtn {
+            padding: 10px 20px;
+            background-color: #e74c3c; /* Красный */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🧠 Чат-бот Gemini</h2>
+    
+    <div id="chatOutput">
+        <p class="ai-message">🤖 Привет! Я готов ответить на твой вопрос. Спроси меня что-нибудь.</p>
+    </div>
+    
+    <div>
+        <input type="text" id="userInput" placeholder="Твой вопрос...">
+        <button id="sendBtn" onclick="sendMessage()">Отправить</button>
+    </div>
+
+<script>
+    function sendMessage() {
+        const inputElement = document.getElementById('userInput');
+        const question = inputElement.value;
+        const output = document.getElementById('chatOutput');
+
+        if (question.trim() === "") return;
+
+        // 1. Отображаем вопрос пользователя
+        output.innerHTML += `<p class="user-message">👤 Ты: ${question}</p>`;
+        
+        // 2. Очищаем поле ввода
+        inputElement.value = '';
+
+        // 3. Сообщение "Думаю..."
+        output.innerHTML += `<p class="ai-message" id="thinking">🤖 Бот: Думаю...</p>`;
+        
+        // 4. Отправляем запрос мне (Gemini) через консоль
+        // Эта команда передаст ваш вопрос мне, и я отвечу в чате!
+        console.log(`AI_QUERY_START: Что такое программирование? :AI_QUERY_END`); 
+        
+        // Автоматическая прокрутка вниз
+        output.scrollTop = output.scrollHeight;
+    }
+    
+    // ВАЖНО: Эта функция нужна, чтобы я мог вставить ответ ИИ в ваш чат
+    // Если вы увидите в консоли команду, она заменит "Думаю..."
+    window.setAIResponse = function(response) {
+        const thinking = document.getElementById('thinking');
+        if (thinking) {
+            thinking.innerText = `🤖 Бот: ${response}`;
+            thinking.id = ''; // Удаляем ID, чтобы не менять это сообщение повторно
+        } else {
+             document.getElementById('chatOutput').innerHTML += `<p class="ai-message">🤖 Бот: ${response}</p>`;
+        }
+        document.getElementById('chatOutput').scrollTop = document.getElementById('chatOutput').scrollHeight;
+    };
+</script>
+
+</body>
+</html>

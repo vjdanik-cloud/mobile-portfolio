@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя Геолокация</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ecf0f1; /* Светло-серый фон */
+            color: #2c3e50;
+            padding: 20px;
+        }
+        h2 { color: #3498db; margin-bottom: 30px; }
+
+        .info-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .status {
+            font-weight: bold;
+            margin-bottom: 20px;
+            min-height: 40px;
+        }
+        
+        .status.loading { color: #f39c12; } /* Оранжевый */
+        .status.success { color: #2ecc71; } /* Зеленый */
+        .status.error { color: #e74c3c; }   /* Красный */
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>📍 Где я?</h2>
+    
+    <div class="info-box">
+        <p class="status loading" id="statusMessage">Нажмите кнопку, чтобы определить местоположение.</p>
+
+        <p>Широта: <span id="latitude">---</span></p>
+        <p>Долгота: <span id="longitude">---</span></p>
+        <p>Точность (метры): <span id="accuracy">---</span></p>
+    </div>
+
+    <button onclick="getLocation()">Определить мое местоположение</button>
+
+<script>
+    function getLocation() {
+        const status = document.getElementById('statusMessage');
+        const lat = document.getElementById('latitude');
+        const lon = document.getElementById('longitude');
+        const acc = document.getElementById('accuracy');
+        
+        // 1. Обновляем статус: Ждем...
+        status.innerText = 'Определение местоположения...';
+        status.className = 'status loading';
+        lat.innerText = '---';
+        lon.innerText = '---';
+        acc.innerText = '---';
+
+        if (navigator.geolocation) {
+            // 2. Вызываем встроенную функцию браузера для геолокации
+            navigator.geolocation.getCurrentPosition(showPosition, showError, {
+                enableHighAccuracy: true, // Включаем высокую точность (через GPS)
+                timeout: 5000 // Максимальное время ожидания 5 секунд
+            });
+        } else {
+            // Если браузер не поддерживает геолокацию
+            status.innerText = 'Ошибка: Ваш браузер не поддерживает геолокацию.';
+            status.className = 'status error';
+        }
+    }
+
+    // Функция, которая срабатывает при УСПЕШНОМ получении данных
+    function showPosition(position) {
+        document.getElementById('latitude').innerText = position.coords.latitude.toFixed(6);
+        document.getElementById('longitude').innerText = position.coords.longitude.toFixed(6);
+        document.getElementById('accuracy').innerText = position.coords.accuracy.toFixed(2);
+        
+        document.getElementById('statusMessage').innerText = 'Местоположение успешно определено!';
+        document.getElementById('statusMessage').className = 'status success';
+    }
+
+    // Функция, которая срабатывает при ОШИБКЕ
+    function showError(error) {
+        let errorMessage = '';
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                errorMessage = "❌ Доступ запрещен. Разрешите браузеру использовать ваше местоположение.";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                errorMessage = "❌ Информация о местоположении недоступна.";
+                break;
+            case error.TIMEOUT:
+                errorMessage = "❌ Истекло время ожидания. Попробуйте снова.";
+                break;
+            default:
+                errorMessage = "❌ Произошла неизвестная ошибка.";
+                break;
+        }
+        document.getElementById('statusMessage').innerText = errorMessage;
+        document.getElementById('statusMessage').className = 'status error';
+    }
+</script>
+
+</body>
+</html>

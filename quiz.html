@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT-Викторина</title>
+    <meta charset="UTF-8"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f7f6; 
+            color: #333;
+            padding: 20px;
+        }
+        h2 { color: #3498db; margin-bottom: 20px; }
+
+        .quiz-container {
+            width: 90%;
+            max-width: 500px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            min-height: 350px;
+        }
+
+        #questionDisplay {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .answer-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background-color: #ecf0f1; /* Светло-серый */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .answer-btn:hover {
+            background-color: #dce0e3;
+        }
+        
+        /* Стили для результата */
+        .correct { background-color: #2ecc71 !important; color: white; } /* Зеленый */
+        .incorrect { background-color: #e74c3c !important; color: white; } /* Красный */
+        
+        #resultScreen {
+            text-align: center;
+        }
+        #resultScreen h3 {
+            color: #2ecc71;
+            font-size: 24px;
+        }
+        #restartBtn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>IT-Викторина</h2>
+
+    <div class="quiz-container">
+        <div id="quiz">
+            <p id="questionDisplay">Загрузка...</p>
+            <div id="answers">
+                </div>
+            <p style="margin-top: 20px;">Вопрос <span id="currentQuestionNum">1</span> из <span id="totalQuestions"></span></p>
+        </div>
+        
+        <div id="resultScreen" style="display: none;">
+            <p id="finalScore"></p>
+            <button id="restartBtn" onclick="startQuiz()">Начать заново</button>
+        </div>
+    </div>
+
+<script>
+    // --- СТРУКТУРА ДАННЫХ (МАССИВ ОБЪЕКТОВ) ---
+    const questions = [
+        {
+            question: "Какое ключевое слово используется для объявления переменной в JavaScript?",
+            options: ["var", "string", "let", "const"],
+            answer: "let"
+        },
+        {
+            question: "Что делает HTML?",
+            options: ["Оформляет внешний вид", "Задает структуру страницы", "Выполняет команды", "Обеспечивает связь с сервером"],
+            answer: "Задает структуру страницы"
+        },
+        {
+            question: "Какой символ используется для обозначения класса в CSS?",
+            options: ["#", ".", "*", ":"],
+            answer: "."
+        },
+        {
+            question: "Какая функция используется для вывода текста в консоль браузера?",
+            options: ["alert()", "console.log()", "print()", "document.write()"],
+            answer: "console.log()"
+        }
+    ];
+
+    let currentQuestionIndex = 0; // Индекс текущего вопроса
+    let score = 0; // Счетчик правильных ответов
+
+    // Функция, которая запускается при старте или сбросе викторины
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        
+        // Показываем экран викторины и скрываем экран результатов
+        document.getElementById('quiz').style.display = 'block';
+        document.getElementById('resultScreen').style.display = 'none';
+        
+        // Обновляем общее количество вопросов
+        document.getElementById('totalQuestions').innerText = questions.length;
+
+        showQuestion();
+    }
+
+    // Функция для отображения текущего вопроса
+    function showQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            showResult(); // Если вопросы закончились, показываем результат
+            return;
+        }
+
+        const q = questions[currentQuestionIndex];
+        document.getElementById('questionDisplay').innerText = q.question;
+        document.getElementById('currentQuestionNum').innerText = currentQuestionIndex + 1;
+
+        const answersDiv = document.getElementById('answers');
+        answersDiv.innerHTML = ''; // Очищаем старые кнопки
+
+        // Создаем кнопки для каждого варианта ответа
+        q.options.forEach(option => {
+            const button = document.createElement('button');
+            button.innerText = option;
+            button.classList.add('answer-btn');
+            
+            // Присваиваем обработчик с вариантом ответа
+            button.onclick = () => checkAnswer(option, button);
+            
+            answersDiv.appendChild(button);
+        });
+    }
+
+    // Функция для проверки ответа
+    function checkAnswer(selectedOption, button) {
+        const correct = questions[currentQuestionIndex].answer;
+        
+        // Отключаем все кнопки, чтобы нельзя было ответить снова
+        document.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = true);
+
+        // 1. Подсвечиваем ответ
+        if (selectedOption === correct) {
+            score++;
+            button.classList.add('correct');
+        } else {
+            button.classList.add('incorrect');
+            // Если ответ неправильный, подсвечиваем правильный
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                if (btn.innerText === correct) {
+                    btn.classList.add('correct');
+                }
+            });
+        }
+        
+        // 2. Переходим к следующему вопросу через 1.5 секунды
+        setTimeout(() => {
+            currentQuestionIndex++;
+            showQuestion();
+        }, 1500); 
+    }
+
+    // Функция для показа финального результата
+    function showResult() {
+        document.getElementById('quiz').style.display = 'none';
+        document.getElementById('resultScreen').style.display = 'block';
+        
+        const total = questions.length;
+        const resultText = `<h3>Викторина завершена!</h3>Ваш результат: <strong>${score}</strong> правильных ответов из ${total}.`;
+        
+        document.getElementById('finalScore').innerHTML = resultText;
+    }
+
+    // Начинаем викторину при загрузке страницы
+    startQuiz();
+</script>
+
+</body>
+</html>

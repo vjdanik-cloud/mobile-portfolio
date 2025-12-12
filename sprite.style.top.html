@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление Спрайтом</title>
+    <meta charset="UTF-8"> 
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #1e2b38;
+            color: white;
+            padding-top: 20px;
+        }
+
+        #gameArea {
+            width: 90%;
+            height: 60%;
+            background-color: #34495e; /* Игровое поле */
+            border: 4px solid #f1c40f;
+            position: relative; /* Важно: чтобы спрайт двигался относительно этого поля */
+            margin-bottom: 30px;
+        }
+
+        #sprite {
+            width: 50px;
+            height: 50px;
+            background-color: #e74c3c; /* Спрайт (игрок) */
+            position: absolute; /* Позволяет перемещать его через top/left */
+            top: 50px; 
+            left: 50px;
+            border-radius: 8px;
+            transition: top 0.1s, left 0.1s; /* Делаем движение плавным */
+        }
+
+        .controls {
+            display: grid;
+            grid-template-areas:
+                ". up ."
+                "left . right"
+                ". down .";
+            gap: 10px;
+            width: 200px;
+        }
+
+        .controls button {
+            padding: 15px;
+            font-size: 20px;
+            background-color: #2ecc71; /* Зеленые кнопки */
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #up { grid-area: up; }
+        #down { grid-area: down; }
+        #left { grid-area: left; }
+        #right { grid-area: right; }
+    </style>
+</head>
+<body>
+
+    <h2>🕹️ Управление Спрайтом</h2>
+    
+    <div id="gameArea">
+        <div id="sprite"></div>
+    </div>
+
+    <div class="controls">
+        <button id="up" onclick="moveSprite(0, -10)">↑</button>
+        <button id="left" onclick="moveSprite(-10, 0)">←</button>
+        <button id="right" onclick="moveSprite(10, 0)">→</button>
+        <button id="down" onclick="moveSprite(0, 10)">↓</button>
+    </div>
+
+<script>
+    // Получаем наш спрайт из HTML
+    const sprite = document.getElementById('sprite');
+    // Шаг движения в пикселях (px)
+    const step = 10; 
+
+    function moveSprite(dx, dy) {
+        // 1. Получаем текущие позиции (CSS свойства top и left)
+        let currentTop = parseInt(sprite.style.top) || 0;
+        let currentLeft = parseInt(sprite.style.left) || 0;
+
+        // 2. Вычисляем новые позиции
+        let newTop = currentTop + dy;
+        let newLeft = currentLeft + dx;
+
+        // 3. Обновляем CSS свойства, чтобы спрайт переместился
+        sprite.style.top = newTop + 'px';
+        sprite.style.left = newLeft + 'px';
+    }
+
+    // Инициализируем начальное положение, чтобы оно было равно 50px, как в CSS
+    sprite.style.top = '50px';
+    sprite.style.left = '50px';
+</script>
+
+</body>
+</html>

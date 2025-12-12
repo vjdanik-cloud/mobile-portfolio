@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прыгающий Мяч</title>
+    <meta charset="UTF-8"> 
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Мяч начинает с пола */
+            background-color: #34495e;
+            overflow: hidden; /* Чтобы мяч не выходил за край */
+        }
+
+        .ball {
+            width: 80px;
+            height: 80px;
+            background-color: #e74c3c; /* Красный мяч */
+            border-radius: 50%; /* Делаем из квадрата круг */
+            position: absolute; /* Нужен для анимации */
+            bottom: 0;
+            
+            /* --- ОСНОВА АНИМАЦИИ: --- */
+            animation: bounce 2s infinite cubic-bezier(0.2, 0.6, 0.8, 0.4); 
+            /* 2s - длительность прыжка; infinite - бесконечно; cubic-bezier - делает прыжок реалистичным */
+        }
+
+        /* Определение анимации 'bounce' */
+        @keyframes bounce {
+            0% {
+                transform: translateY(0); /* Старт: на полу */
+            }
+            50% {
+                transform: translateY(-250px); /* Середина: в воздухе */
+                background-color: #f1c40f; /* Меняем цвет в полете */
+            }
+            100% {
+                transform: translateY(0); /* Конец: снова на полу */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ball"></div>
+
+</body>
+</html>
