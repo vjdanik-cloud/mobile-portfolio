@@ -10,15 +10,12 @@
             margin: 0;
             padding: 0;
             color: #333;
+            transition: background-color 0.5s, color 0.5s; /* Плавный переход при смене режима */
 
-            /* --- СТИЛИ ДЛЯ АНИМИРОВАННОГО ФОНА --- */
-            /* Градиент из четырех цветов */
+            /* --- СТИЛИ ДЛЯ АНИМИРОВАННОГО ФОНА (Светлый режим) --- */
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            /* Увеличение размера, чтобы градиент мог двигаться */
             background-size: 400% 400%; 
-            /* Анимация: 15 секунд, плавное движение, бесконечный цикл */
             animation: gradient-shift 15s ease infinite; 
-            /* --- КОНЕЦ АНИМИРОВАННЫХ СТИЛЕЙ --- */
         }
 
         /* Определение, как именно должен двигаться фон */
@@ -29,21 +26,19 @@
         }
 
         header {
-            /* Полупрозрачный фон, чтобы видеть анимацию */
             background-color: rgba(52, 152, 219, 0.9); 
             color: white;
             padding: 20px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            /* z-index для поднятия над фоном */
             position: relative; 
             z-index: 2;
+            transition: background-color 0.5s;
         }
 
         section {
             padding: 20px;
             margin-bottom: 20px;
-            /* Почти белый полупрозрачный фон для читаемости */
             background-color: rgba(255, 255, 255, 0.95); 
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -52,6 +47,7 @@
             margin-right: auto;
             position: relative;
             z-index: 2;
+            transition: background-color 0.5s;
         }
 
         h3 {
@@ -59,6 +55,7 @@
             border-bottom: 2px solid #2ecc71; 
             padding-bottom: 5px;
             margin-bottom: 15px;
+            transition: color 0.5s, border-bottom-color 0.5s;
         }
         
         /* Список проектов */
@@ -72,7 +69,7 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            transition: background-color 0.2s;
+            transition: background-color 0.5s;
         }
 
         .project-list li:hover {
@@ -83,12 +80,14 @@
             text-decoration: none;
             color: #3498db;
             font-weight: bold;
+            transition: color 0.5s;
         }
 
         .project-desc {
             font-size: 0.9em;
             color: #666;
             margin-top: 5px;
+            transition: color 0.5s;
         }
 
         /* Стиль для навыков */
@@ -100,6 +99,7 @@
             margin: 5px;
             border-radius: 4px;
             font-size: 0.9em;
+            transition: background-color 0.5s;
         }
         
         footer {
@@ -109,6 +109,66 @@
             font-size: 0.9em;
             position: relative;
             z-index: 2;
+            transition: color 0.5s;
+        }
+        
+        /* --- СТИЛИ ТЕМНОГО РЕЖИМА --- */
+        body.dark-mode {
+            background-color: #2c3e50; /* Темный фон */
+            color: #ecf0f1; /* Светлый текст */
+            background: #2c3e50; /* Отключаем градиент для темного режима */
+            animation: none;
+        }
+
+        body.dark-mode section {
+            background-color: #34495e; /* Темный фон секций */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode header {
+            background-color: #1a242f; 
+        }
+
+        body.dark-mode h3 {
+            color: #1abc9c; /* Бирюзовый заголовок */
+            border-bottom-color: #1abc9c;
+        }
+
+        body.dark-mode .project-list li {
+            border-color: #555;
+            background-color: #34495e;
+        }
+
+        body.dark-mode .project-list li:hover {
+            background-color: #44596c;
+        }
+        
+        body.dark-mode .project-list a {
+            color: #f1c40f; /* Желтая ссылка */
+        }
+        
+        body.dark-mode .project-desc {
+            color: #bdc3c7;
+        }
+
+        body.dark-mode .skills span {
+            background-color: #1abc9c;
+        }
+
+        #modeToggle {
+            margin: 10px auto; 
+            display: block; 
+            padding: 10px 20px; 
+            border: none; 
+            background: #3498db; 
+            color: white; 
+            border-radius: 5px; 
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.5s;
+        }
+        
+        body.dark-mode #modeToggle {
+            background: #1abc9c;
         }
     </style>
 </head>
@@ -118,6 +178,8 @@
         <h1>Моё Портфолио Разработчика</h1>
         <p>Практический опыт программирования на JavaScript, HTML, CSS на мобильном устройстве.</p>
     </header>
+
+    <button id="modeToggle">Включить Темный Режим</button>
 
     <section id="about">
         <h3>Обо мне</h3>
@@ -163,6 +225,26 @@
     <footer>
         <p>&copy; 2025 Моё Мобильное Портфолио. Все права защищены.</p>
     </footer>
+
+<script>
+    document.getElementById('modeToggle').addEventListener('click', function() {
+        const body = document.body;
+        // Переключаем класс 'dark-mode'
+        const isDarkMode = body.classList.toggle('dark-mode');
+        
+        // Сохраняем выбор пользователя в памяти (localStorage), чтобы режим оставался после перезагрузки
+        localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+        
+        // Обновляем текст кнопки
+        this.innerText = isDarkMode ? 'Выключить Темный Режим' : 'Включить Темный Режим';
+    });
+
+    // Проверяем при загрузке страницы, что выбрал пользователь в прошлый раз
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('modeToggle').innerText = 'Выключить Темный Режим';
+    }
+</script>
 
 </body>
 </html>
