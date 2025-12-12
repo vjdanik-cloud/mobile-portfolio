@@ -9,32 +9,54 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f7f6; /* Светлый фон */
             color: #333;
+
+            /* --- СТИЛИ ДЛЯ АНИМИРОВАННОГО ФОНА --- */
+            /* Градиент из четырех цветов */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            /* Увеличение размера, чтобы градиент мог двигаться */
+            background-size: 400% 400%; 
+            /* Анимация: 15 секунд, плавное движение, бесконечный цикл */
+            animation: gradient-shift 15s ease infinite; 
+            /* --- КОНЕЦ АНИМИРОВАННЫХ СТИЛЕЙ --- */
+        }
+
+        /* Определение, как именно должен двигаться фон */
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
         }
 
         header {
-            background-color: #3498db; /* Синий заголовок */
+            /* Полупрозрачный фон, чтобы видеть анимацию */
+            background-color: rgba(52, 152, 219, 0.9); 
             color: white;
             padding: 20px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            /* z-index для поднятия над фоном */
+            position: relative; 
+            z-index: 2;
         }
 
         section {
             padding: 20px;
             margin-bottom: 20px;
-            background-color: white;
+            /* Почти белый полупрозрачный фон для читаемости */
+            background-color: rgba(255, 255, 255, 0.95); 
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
+            z-index: 2;
         }
 
         h3 {
             color: #2c3e50;
-            border-bottom: 2px solid #2ecc71; /* Зеленый подчерк */
+            border-bottom: 2px solid #2ecc71; 
             padding-bottom: 5px;
             margin-bottom: 15px;
         }
@@ -85,6 +107,8 @@
             padding: 15px;
             color: #7f8c8d;
             font-size: 0.9em;
+            position: relative;
+            z-index: 2;
         }
     </style>
 </head>
